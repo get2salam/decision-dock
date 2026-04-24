@@ -7,13 +7,13 @@
     <meta name="description" content="Queue hard decisions, compare options, and keep the chosen path visible." />
     <link rel="stylesheet" href="./styles/app.css" />
   </head>
-  <body style="--primary:#94a3b8;--secondary:#cbd5e1;--panel:#10161f;--edge:#334155;--glow:rgba(148, 163, 184, 0.2)">
+  <body style="--primary:#818cf8;--secondary:#38bdf8;--panel:#111326;--edge:#444f8a;--glow:rgba(129, 140, 248, 0.22)">
     <div class="shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Local-first micro app</p>
+          <p class="eyebrow">Decision workspace</p>
           <h1>Decision Dock</h1>
-          <p class="lede">Queue hard decisions, compare options, and keep the chosen path visible.</p>
+          <p class="lede">Make decisions clearer with owners, next steps, conviction scoring, and review dates.</p>
         </div>
         <div class="actions">
           <button class="btn" data-action="import">Import</button>
@@ -25,19 +25,20 @@
 
       <section class="hero card">
         <div>
-          <p class="eyebrow">Decisions board</p>
+          <p class="eyebrow">Decision dock board</p>
           <h2 data-role="board-title"></h2>
           <p data-role="board-subtitle"></p>
         </div>
-        <p class="accent">Dock complex choices somewhere calm before they leak into everything else.</p>
+        <p class="accent">Decisions get easier when ownership, next review, and conviction are visible instead of trapped in your head.</p>
       </section>
 
       <section class="stats" data-role="stats"></section>
+      <section class="insights" data-role="insights"></section>
 
       <section class="controls card">
         <label>
           <span>Search</span>
-          <input type="search" data-field="search" placeholder="Search decisions..." />
+          <input type="search" data-field="search" placeholder="Search decisions, notes, and next steps..." />
         </label>
         <label>
           <span>Decision type</span>
@@ -55,13 +56,18 @@
           <div class="panel-head">
             <div>
               <strong>Decisions</strong>
-              <p>Sorted by signal minus friction.</p>
+              <p>Queue hard decisions, compare options, and keep the chosen path visible.</p>
             </div>
             <span class="chip" data-role="count"></span>
           </div>
           <div class="list" data-role="list"></div>
         </article>
         <article class="card editor-panel" data-role="editor"></article>
+      </section>
+
+      <section class="secondary">
+        <article class="card secondary-panel" data-role="secondary-primary"></article>
+        <article class="card secondary-panel" data-role="secondary-secondary"></article>
       </section>
     </div>
     <script type="module" src="./js/main.js"></script>

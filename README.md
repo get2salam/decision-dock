@@ -4,45 +4,37 @@ Queue hard decisions, compare options, and keep the chosen path visible.
 
 ![Decision Dock preview](docs/preview.svg)
 
-Decision Dock is a small local-first planning tool for solo builders, operators, and creative teams who want a cleaner way to manage decisions. Add items, score the signal, track the friction, and keep the strongest opportunities visible without needing a backend or build step.
+Decision Dock is a local-first workspace for founders, operators, and solo builders who want a cleaner way to manage decisions. It keeps conviction, owner, next step, and review timing visible so the right things move forward with less drift.
 
-## Features
+## What it does
 
-- Local-first persistence with `localStorage`
-- Search and filter controls
-- Ranked list sorted by signal minus friction
-- Inline editor for title, notes, type, status, score, and effort
-- Import/export JSON backups
-- Re-seed action for resetting the sample board
-- Keyboard shortcuts: `N` for new, `/` for search
-- No build tooling, just open in a browser
+- ranks decisions by leverage, conviction, timing, and friction
+- tracks **owner**, **next step**, **review date**, and **conviction** for each decision
+- highlights the best current bet, the next review slot, and the strongest signal on the board
+- renders a dedicated queue plus a category mix snapshot beneath the main board
+- saves locally in the browser with JSON import/export backups
+- quick action: **Compare options**
+- quick action: **Raise conviction**
+- quick action: **Choose path**
+
+## Why it feels different
+
+Decision Dock is not just a generic list. It is shaped around the real workflow behind decisions, so the board helps you decide what matters next instead of simply storing records.
 
 ## Quick start
 
 ```bash
-git clone https://github.com/<you>/decision-dock.git
+git clone https://github.com/get2salam/decision-dock.git
 cd decision-dock
 python -m http.server 8000
 ```
 
 Then open <http://localhost:8000>.
 
-## Data shape
+## Keyboard shortcuts
 
-```json
-{
-  "boardTitle": "Decision dock",
-  "items": [
-    {
-      "title": "Pick the first paid plan shape",
-      "category": "Product",
-      "state": "Framing",
-      "score": 9,
-      "effort": 4
-    }
-  ]
-}
-```
+- `N` creates a new decision
+- `/` focuses the search box
 
 ## Privacy
 
