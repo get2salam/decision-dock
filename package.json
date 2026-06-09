@@ -1,0 +1,11 @@
+{
+  "name": "decision-dock",
+  "version": "0.1.0",
+  "description": "Queue hard decisions, compare options, and keep the chosen path visible.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "license": "MIT"
+}

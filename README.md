@@ -40,6 +40,14 @@ Then open <http://localhost:8000>.
 
 Everything stays in your browser unless you export a JSON backup.
 
+## Tests
+
+Pure helpers that guard the JSON import boundary (string length caps, ISO date validation, item-count limits) ship with a [node:test](https://nodejs.org/api/test.html) suite:
+
+```bash
+npm test
+```
+
 ## License
 
 MIT

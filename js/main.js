@@ -1,3 +1,11 @@
+import {
+  IMPORT_LIMITS,
+  boundedString,
+  safeFiniteNumber,
+  safeISODate,
+  sanitizeImportPayload,
+} from './safe-input.js';
+
 const SPEC = {
   "slug": "decision-dock",
   "title": "Decision Dock",
@@ -201,21 +209,24 @@ function todayISO(offset = 0) {
 }
 
 function daysFromToday(value) {
-  if (!value) return 999;
+  const safe = safeISODate(value, '');
+  if (!safe) return 999;
   const today = new Date(`${todayISO()}T00:00:00`);
-  const target = new Date(`${value}T00:00:00`);
+  const target = new Date(`${safe}T00:00:00`);
   return Math.round((target - today) / 86400000);
 }
 
 function bumpDate(value, days) {
-  const date = new Date(`${value || todayISO()}T00:00:00`);
-  date.setDate(date.getDate() + days);
+  const base = safeISODate(value, todayISO());
+  const date = new Date(`${base}T00:00:00`);
+  date.setDate(date.getDate() + safeFiniteNumber(days, 0));
   return date.toISOString().slice(0, 10);
 }
 
 function formatDate(value) {
-  if (!value) return 'No date';
-  return new Date(`${value}T00:00:00`).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+  const safe = safeISODate(value, '');
+  if (!safe) return 'No date';
+  return new Date(`${safe}T00:00:00`).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 }
 
 function escapeHtml(value) {
@@ -247,18 +258,23 @@ function toneForDate(item) {
 }
 
 function normalize(item = {}) {
+  const metricDefault = SPEC.metric.default ?? 6;
   return {
-    id: item.id || uid(),
-    title: item.title || `New ${SPEC.itemLabel}`,
-    note: item.note || SPEC.defaults.note,
+    id: boundedString(item.id, 64) || uid(),
+    title: boundedString(item.title) || `New ${SPEC.itemLabel}`,
+    note: boundedString(item.note) || SPEC.defaults.note,
     category: SPEC.categories.includes(item.category) ? item.category : SPEC.categories[0],
     state: SPEC.states.includes(item.state) ? item.state : SPEC.states[0],
-    score: clamp(item.score ?? 7, 1, 10),
-    effort: clamp(item.effort ?? 3, 1, 10),
-    metric: clamp(item.metric ?? SPEC.metric.default ?? 6, SPEC.metric.min, SPEC.metric.max),
-    textOne: item.textOne || SPEC.textOne.default,
-    textTwo: item.textTwo || SPEC.textTwo.default,
-    date: item.date || todayISO(3),
+    score: clamp(safeFiniteNumber(item.score, 7), 1, 10),
+    effort: clamp(safeFiniteNumber(item.effort, 3), 1, 10),
+    metric: clamp(
+      safeFiniteNumber(item.metric, metricDefault),
+      SPEC.metric.min,
+      SPEC.metric.max,
+    ),
+    textOne: boundedString(item.textOne) || SPEC.textOne.default,
+    textTwo: boundedString(item.textTwo) || SPEC.textTwo.default,
+    date: safeISODate(item.date, todayISO(3)),
   };
 }
 
@@ -373,14 +389,32 @@ function exportState() {
 
 async function importState(file) {
   const raw = await file.text();
-  const parsed = JSON.parse(raw);
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    showToast('Import failed: file is not valid JSON.');
+    return;
+  }
+  const result = sanitizeImportPayload(parsed);
+  if (!result.ok) {
+    showToast('Import failed: payload is not a Decision Dock backup.');
+    return;
+  }
   commit({
     ...seedState(),
-    ...parsed,
-    items: (parsed.items || []).map((item) => normalize(item)),
-    ui: { ...seedState().ui, ...(parsed.ui || {}) },
+    items: result.items.map((item) => normalize(item)),
+    ui: { ...seedState().ui, ...result.ui },
   });
-  showToast('Imported backup.');
+  const dropped = result.skipped.invalid + result.skipped.overflow;
+  if (dropped > 0) {
+    const detail = result.skipped.overflow
+      ? `over the ${IMPORT_LIMITS.maxImportItems}-item cap`
+      : 'malformed';
+    showToast(`Imported backup. Skipped ${dropped} ${detail} record${dropped === 1 ? '' : 's'}.`);
+  } else {
+    showToast('Imported backup.');
+  }
 }
 
 async function copyValue(value, label) {
