@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {
   IMPORT_LIMITS,
   boundedString,
+  escapeHtml,
   safeFiniteNumber,
   safeISODate,
   sanitizeImportPayload,
@@ -55,6 +56,19 @@ test('safeISODate rejects malformed and impossible dates', () => {
   assert.equal(safeISODate('', '2026-01-01'), '2026-01-01');
   assert.equal(safeISODate(null, '2026-01-01'), '2026-01-01');
   assert.equal(safeISODate(undefined, '2026-01-01'), '2026-01-01');
+});
+
+test('escapeHtml neutralizes user-controlled markup for template rendering', () => {
+  const payload = `<img src=x onerror="alert('owned')"> & next`;
+  assert.equal(
+    escapeHtml(payload),
+    '&lt;img src=x onerror=&quot;alert(&#39;owned&#39;)&quot;&gt; &amp; next',
+  );
+});
+
+test('escapeHtml keeps nullish values render-safe', () => {
+  assert.equal(escapeHtml(null), '');
+  assert.equal(escapeHtml(undefined), '');
 });
 
 test('sanitizeImportPayload rejects non-object payloads', () => {

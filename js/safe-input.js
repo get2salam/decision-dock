@@ -31,6 +31,15 @@ export function safeISODate(value, fallback = '') {
   return value;
 }
 
+export function escapeHtml(value) {
+  return String(value || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 export function sanitizeImportPayload(parsed, { maxItems = IMPORT_LIMITS.maxImportItems } = {}) {
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
     return { ok: false, items: [], ui: {}, skipped: { invalid: 0, overflow: 0 } };
