@@ -48,6 +48,14 @@ Pure helpers that guard the JSON import boundary (string length caps, ISO date v
 npm test
 ```
 
+For the same zero-install check used by CI, run:
+
+```bash
+npm run verify
+```
+
+The GitHub Actions workflow runs this command on pushes and pull requests against `main`, so a contributor can verify the same contract locally before opening a PR.
+
 ## License
 
 MIT
