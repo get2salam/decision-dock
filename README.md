@@ -31,6 +31,30 @@ python -m http.server 8000
 
 Then open <http://localhost:8000>.
 
+## Runnable review briefing example
+
+Decision Dock exports are plain JSON, so the same backup can feed a quick review briefing before a planning meeting. The example below reuses the import-safety helpers, ranks active decisions with the app's scoring shape, and prints the next three calls that need attention.
+
+Run it with the built-in sample data:
+
+```bash
+npm run example:briefing
+```
+
+Or pass a JSON file exported from the app:
+
+```bash
+node examples/review-briefing.mjs ./decision-dock.json
+```
+
+Expected sample output starts with:
+
+```text
+Decision Dock review briefing
+Reference date: 2026-04-24
+Active decisions: 2
+```
+
 ## Keyboard shortcuts
 
 - `N` creates a new decision
