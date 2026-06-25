@@ -66,7 +66,7 @@ Everything stays in your browser unless you export a JSON backup.
 
 ## Tests
 
-Pure helpers that guard the JSON import boundary (string length caps, ISO date validation, item-count limits) ship with a [node:test](https://nodejs.org/api/test.html) suite:
+Pure helpers that guard the JSON import boundary (string length caps, ISO date validation, item-count limits) and the runnable review briefing example ship with a [node:test](https://nodejs.org/api/test.html) suite:
 
 ```bash
 npm test
@@ -78,7 +78,7 @@ For the same zero-install check used by CI, run:
 npm run verify
 ```
 
-The GitHub Actions workflow runs this command on pushes and pull requests against `main`, so a contributor can verify the same contract locally before opening a PR.
+The GitHub Actions workflow runs this command on pushes and pull requests against `main`, so a contributor can verify the same contract locally before opening a PR. The example regression test executes `examples/review-briefing.mjs` with both the built-in sample and a temporary exported JSON file, keeping the documented demo runnable.
 
 ## License
 
