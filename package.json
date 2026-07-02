@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "example:briefing": "node examples/review-briefing.mjs",
+    "example:health": "node examples/board-health-check.mjs",
     "test": "node --test test/*.test.js",
     "verify": "npm test",
     "ci": "npm run verify"

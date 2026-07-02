@@ -55,6 +55,33 @@ Reference date: 2026-04-24
 Active decisions: 2
 ```
 
+## Troubleshooting: board health check
+
+If a weekly review keeps surfacing the same "wait, who owns this?" moment, run the board health check before the meeting instead of during it. It reuses the same import-safety helpers as the review briefing to flag decisions that are missing an owner, missing a next step, or overdue for review (and skips completed decisions, since a `Chosen` or `Parked` item isn't waiting on anyone).
+
+Run it with the built-in sample data:
+
+```bash
+npm run example:health
+```
+
+Or point it at an exported backup:
+
+```bash
+node examples/board-health-check.mjs ./decision-dock.json
+```
+
+The script exits with status `1` when it finds issues, so it can also gate a pre-review checklist or CI job on a clean board:
+
+```text
+Decision Dock board health check
+Reference date: 2026-04-24
+Decisions checked: 4
+Issues found: 2
+- Pricing model for early users: missing owner
+- When to hire the first helper: missing next step, overdue review (was due 2026-04-20)
+```
+
 ## Keyboard shortcuts
 
 - `N` creates a new decision
@@ -66,7 +93,7 @@ Everything stays in your browser unless you export a JSON backup.
 
 ## Tests
 
-Pure helpers that guard the JSON import boundary (string length caps, ISO date validation, item-count limits) and the runnable review briefing example ship with a [node:test](https://nodejs.org/api/test.html) suite:
+Pure helpers that guard the JSON import boundary (string length caps, ISO date validation, item-count limits) and the runnable review briefing and board health check examples ship with a [node:test](https://nodejs.org/api/test.html) suite:
 
 ```bash
 npm test
@@ -78,7 +105,7 @@ For the same zero-install check used by CI, run:
 npm run verify
 ```
 
-The GitHub Actions workflow runs this command on pushes and pull requests against `main`, so a contributor can verify the same contract locally before opening a PR. The example regression test executes `examples/review-briefing.mjs` with both the built-in sample and a temporary exported JSON file, keeping the documented demo runnable.
+The GitHub Actions workflow runs this command on pushes and pull requests against `main`, so a contributor can verify the same contract locally before opening a PR. The example regression tests execute `examples/review-briefing.mjs` and `examples/board-health-check.mjs` with both the built-in sample and a temporary exported JSON file, keeping the documented demos runnable.
 
 ## License
 
